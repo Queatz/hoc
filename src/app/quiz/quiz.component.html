@@ -1,0 +1,7 @@
+<div>
+  <input [placeholder]="item.question" [(ngModel)]="answer" />
+  <button (click)="nextQuestionPlz()">Continue</button>
+  <br />
+  <br />
+  {{ index + 1 }} / {{ api.activeQuiz?.items?.length }} <button (click)="leave()">Leave</button>
+</div>

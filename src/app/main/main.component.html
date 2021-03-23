@@ -1,0 +1,20 @@
+<div>
+  <div>
+    New <textarea [(ngModel)]="newQuiz" (keydown)="onTab(textarea, $event)" #textarea placeholder="Paste CSV here"></textarea>
+    <button (click)="createQuiz(newQuiz)">
+      Create Quiz
+    </button>
+  </div>
+  <div *ngFor="let quiz of api.quizzes">
+    {{ quiz.name }}
+    <button (click)="practiceQuiz(quiz)">
+      Practice
+    </button>
+    <button (click)="startQuiz(quiz)">
+      Start Quiz
+    </button>
+    <button (click)="deleteQuiz(quiz)">
+      X
+    </button>
+  </div>
+</div>
