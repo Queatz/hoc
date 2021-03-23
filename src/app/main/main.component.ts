@@ -30,7 +30,9 @@ export class MainComponent implements OnInit {
   }
 
   deleteQuiz(quiz: Quiz): void {
-    this.api.quizzes.splice(this.api.quizzes.indexOf(quiz), 1)
+    if (prompt('Delete this quiz?')) {
+      this.api.deleteQuiz(quiz)
+    }
   }
 
   createQuiz(csv: string): void {
@@ -38,7 +40,6 @@ export class MainComponent implements OnInit {
       const [ answer, question ] = line.split('\t').map(x => x.trim().replace(/\s+/g, ' '))
       
       if (!answer || !question) {
-        alert('Could not create quiz.')
         return
       }
 
@@ -46,7 +47,7 @@ export class MainComponent implements OnInit {
         question,
         answer
       } as QuizItem
-    })
+    }).filter(x => !!x)
       
     if (!items.length) {
       alert('Could not create quiz.')
@@ -55,9 +56,10 @@ export class MainComponent implements OnInit {
 
     this.newQuiz = ''
 
-    const name = items.map(x => x!.question).slice(0, 5).map(x => x.length > 20 ? `${x.slice(0, 20)}…` : x).join(', ') + (items.length > 5 ? `, … (${items.length - 5} more)` : '')
+    const show = 5
+    const name = items.map(x => x!.question).slice(0, show).map(x => x.length > 20 ? `${x.slice(0, 20)}…` : x).join(', ') + (items.length > show ? `, … (${items.length - show} more)` : '')
 
-    this.api.quizzes.unshift({
+    this.api.saveQuiz({
       items,
       name
     } as Quiz)

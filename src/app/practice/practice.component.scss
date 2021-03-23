@@ -1,0 +1,21 @@
+h1 {
+  font-size: 96px;
+}
+
+.container {
+  text-align: center;
+
+  input {
+    width: 100%;
+    display: block;
+    border: transparent;
+    border-bottom: 2px solid #99ccff;
+    margin-bottom: 1rem;
+    padding: .5rem;
+    font-size: 32px;
+  }
+
+  button.cta {
+    font-size: 24px;
+  }
+}

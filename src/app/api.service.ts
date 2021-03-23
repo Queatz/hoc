@@ -8,7 +8,31 @@ export class ApiService {
   quizzes: Array<Quiz> = []
   activeQuiz?: Quiz
 
-  constructor() { }
+  constructor() {
+    this.load()
+  }
+
+  saveQuiz(quiz: Quiz) {
+    this.quizzes.unshift(quiz)
+    this.sync()
+  }
+
+  deleteQuiz(quiz: Quiz) {
+    this.quizzes.splice(this.quizzes.indexOf(quiz), 1)
+    this.sync()
+  }
+
+  load() {
+    const db  = JSON.parse(localStorage.getItem('db') || 'null')
+
+    if (db) {
+      this.quizzes = db
+    }
+  }
+
+  sync() {
+    localStorage.setItem('db', JSON.stringify(this.quizzes))
+  }
 }
 
 export class Quiz {

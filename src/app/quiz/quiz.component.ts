@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router'
 import { ApiService, QuizItem } from '../api.service'
 
@@ -7,22 +7,37 @@ import { ApiService, QuizItem } from '../api.service'
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.scss']
 })
-export class QuizComponent implements OnInit {
+export class QuizComponent implements OnInit, AfterViewInit {
 
   item!: QuizItem
   index = 0
-
   answer = ''
+
+  @ViewChild('answerInput', { static: true, read: ViewContainerRef })
+  answerInput!: ViewContainerRef
 
   constructor(private router: Router, public api: ApiService) { }
 
   ngOnInit(): void {
+    if (!this.api.activeQuiz) {
+      this.router.navigate([ '/' ])
+      return
+    }
+
     this.item = this.api.activeQuiz!.items[0]
   }
 
-  nextQuestionPlz(): void {
+  ngAfterViewInit(): void {
+    this.answerInput.element.nativeElement.focus()
+  }
+
+  nextQuestionPlz(event?: KeyboardEvent): void {
+    if (event && event.key !== 'Enter') {
+      return
+    }
+
     if (this.item.answer !== this.answer) {
-      alert('not right yet')
+      alert('Not quite right...')
       return
     }
 
@@ -30,7 +45,7 @@ export class QuizComponent implements OnInit {
       this.item = this.api.activeQuiz!.items[++this.index]
       this.answer = ''
     } else {
-      alert('ur done')
+      alert('You are done!')
       this.router.navigate([ '/' ])
     }
   }
