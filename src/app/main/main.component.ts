@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { ApiService, Quiz, QuizItem } from '../api.service'
 
@@ -27,6 +27,11 @@ export class MainComponent implements OnInit {
   practiceQuiz(quiz: Quiz): void {
     this.api.activeQuiz = quiz
     this.router.navigate([ '/practice' ])
+  }
+
+  examineQuiz(quiz: Quiz): void {
+    this.api.activeQuiz = quiz
+    this.router.navigate([ '/examine' ])
   }
 
   deleteQuiz(quiz: Quiz): void {

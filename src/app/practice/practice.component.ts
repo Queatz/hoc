@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core'
 import { Router } from '@angular/router'
 import { ApiService, QuizItem } from '../api.service'
 
@@ -41,6 +41,10 @@ export class PracticeComponent implements OnInit, AfterViewInit {
       return
     }
 
+    this.advance()
+  }
+
+  advance(): void {
     if (this.index < this.api.activeQuiz!.items.length - 1) {
       this.item = this.api.activeQuiz!.items[++this.index]
       this.answer = ''

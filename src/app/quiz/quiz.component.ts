@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core'
 import { Router } from '@angular/router'
 import { ApiService, QuizItem } from '../api.service'
 
@@ -12,6 +12,7 @@ export class QuizComponent implements OnInit, AfterViewInit {
   item!: QuizItem
   index = 0
   answer = ''
+  tries = 0
 
   @ViewChild('answerInput', { static: true, read: ViewContainerRef })
   answerInput!: ViewContainerRef
@@ -37,13 +38,21 @@ export class QuizComponent implements OnInit, AfterViewInit {
     }
 
     if (this.item.answer !== this.answer) {
-      alert('Not quite right...')
+      if (this.tries > 1) {
+        alert('You have failed! Try again!')
+        this.leave()
+      } else {
+        this.tries++
+        alert(this.tries === 2 ? 'No!' : 'Not quite!')
+      }
+
       return
     }
 
     if (this.index < this.api.activeQuiz!.items.length - 1) {
       this.item = this.api.activeQuiz!.items[++this.index]
       this.answer = ''
+      this.tries = 0
     } else {
       alert('You are done!')
       this.router.navigate([ '/' ])
