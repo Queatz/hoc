@@ -28,9 +28,9 @@ h2 {
     &:not(:hover) button.only-on-hover {
       display: none;
     }
-    
-    button + button {
-      margin-left: 1rem;
-    }
   }
+}
+    
+button + button {
+  margin-left: 1rem;
 }

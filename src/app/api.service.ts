@@ -17,6 +17,10 @@ export class ApiService {
     this.sync()
   }
 
+  editQuiz(quiz: Quiz) {
+    this.sync()
+  }
+
   deleteQuiz(quiz: Quiz) {
     this.quizzes.splice(this.quizzes.indexOf(quiz), 1)
     this.sync()

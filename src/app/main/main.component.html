@@ -3,7 +3,8 @@
   <section class="new-quiz">
     <textarea [(ngModel)]="newQuiz" (keydown)="onTab(textarea, $event)" #textarea placeholder="Paste CSV here"></textarea>
     <br />
-    <button (click)="createQuiz(newQuiz)">Create Quiz</button>
+    <button *ngIf="editing" (click)="cancelEditQuiz()">Cancel</button>
+    <button (click)="createQuiz(newQuiz)">{{ editing ? 'Save' : 'Create'}} Quiz</button>
   </section>
   <section>
     <div class="quiz" *ngFor="let quiz of api.quizzes">
@@ -19,6 +20,9 @@
         </button>
         <button class="only-on-hover" (click)="examineQuiz(quiz)">
           🔍
+        </button>
+        <button class="only-on-hover" (click)="editQuiz(quiz)">
+          ✎
         </button>
         <button class="only-on-hover" (click)="deleteQuiz(quiz)">
           ❌

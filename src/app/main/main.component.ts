@@ -10,6 +10,7 @@ import { ApiService, Quiz, QuizItem } from '../api.service'
 export class MainComponent implements OnInit {
 
   newQuiz = ''
+  editing?: Quiz
 
   constructor(
     public api: ApiService,
@@ -22,6 +23,16 @@ export class MainComponent implements OnInit {
   startQuiz(quiz: Quiz): void {
     this.api.activeQuiz = quiz
     this.router.navigate([ '/quiz' ])
+  }
+
+  editQuiz(quiz: Quiz): void {
+    this.editing = quiz
+    this.newQuiz = quiz.items.map(item => `${item.answer}\t${item.question}`).join('\n')
+  }
+
+  cancelEditQuiz() {
+    this.editing = undefined
+    this.newQuiz = ''
   }
 
   practiceQuiz(quiz: Quiz): void {
@@ -52,7 +63,7 @@ export class MainComponent implements OnInit {
         question,
         answer
       } as QuizItem
-    }).filter(x => !!x)
+    }).filter(x => !!x) as Array<QuizItem>
       
     if (!items.length) {
       alert('Could not create quiz.')
@@ -64,10 +75,16 @@ export class MainComponent implements OnInit {
     const show = 5
     const name = items.map(x => x!.question).slice(0, show).map(x => x.length > 20 ? `${x.slice(0, 20)}…` : x).join(', ') + (items.length > show ? `, … (${items.length - show} more)` : '')
 
-    this.api.saveQuiz({
-      items,
-      name
-    } as Quiz)
+    if (this.editing) {
+      this.editing!.name = name
+      this.editing!.items = items
+      this.api.editQuiz(this.editing!)
+    } else {
+      this.api.saveQuiz({
+        items,
+        name
+      } as Quiz)
+    }
   }
 
   onTab(textarea: HTMLTextAreaElement, e: KeyboardEvent): void {
