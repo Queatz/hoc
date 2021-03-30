@@ -6,8 +6,9 @@
     <button *ngIf="editing" (click)="cancelEditQuiz()">Cancel</button>
     <button (click)="createQuiz(newQuiz)">{{ editing ? 'Save' : 'Create'}} Quiz</button>
   </section>
-  <section>
-    <div class="quiz" *ngFor="let quiz of api.quizzes">
+  <section *ngFor="let section of sections">
+    <h3>{{ section.name }}</h3>
+    <div class="quiz" *ngFor="let quiz of section.quizzes">
       <div class="quiz-name">
         {{ quiz.name }}
       </div>
@@ -20,6 +21,9 @@
         </button>
         <button class="only-on-hover" (click)="examineQuiz(quiz)">
           🔍
+        </button>
+        <button class="only-on-hover" (click)="moveQuiz(quiz)">
+          ✔
         </button>
         <button class="only-on-hover" (click)="editQuiz(quiz)">
           ✎

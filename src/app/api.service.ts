@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core'
+import { BehaviorSubject } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
+  quizzesObservable = new BehaviorSubject<Array<Quiz>>([])
   quizzes: Array<Quiz> = []
   activeQuiz?: Quiz
 
@@ -32,9 +34,12 @@ export class ApiService {
     if (db) {
       this.quizzes = db
     }
+ 
+    this.quizzesObservable.next(this.quizzes)
   }
 
   sync() {
+    this.quizzesObservable.next(this.quizzes)
     localStorage.setItem('db', JSON.stringify(this.quizzes))
   }
 }
@@ -42,6 +47,7 @@ export class ApiService {
 export class Quiz {
   name!: string
   items!: Array<QuizItem>
+  active = false
 }
 
 export class QuizItem {

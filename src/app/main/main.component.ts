@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { ApiService, Quiz, QuizItem } from '../api.service'
 
@@ -11,13 +11,27 @@ export class MainComponent implements OnInit {
 
   newQuiz = ''
   editing?: Quiz
+  sections: Array<{ name: string, quizzes: Array<Quiz> }> = []
 
   constructor(
     public api: ApiService,
-    private router: Router
+    private router: Router,
+    private cr: ChangeDetectorRef
     ) { }
 
   ngOnInit(): void {
+    this.api.quizzesObservable.subscribe((quizzes: Array<Quiz>) => {
+      this.sections = [
+        {
+          name: 'Learning',
+          quizzes: quizzes.filter(x => x.active)
+        }, {
+          name: 'Learned',
+          quizzes: quizzes.filter(x => !x.active)
+        }
+      ].filter(x => x.quizzes.length)
+      this.cr.detectChanges()
+    })
   }
 
   startQuiz(quiz: Quiz): void {
@@ -28,6 +42,11 @@ export class MainComponent implements OnInit {
   editQuiz(quiz: Quiz): void {
     this.editing = quiz
     this.newQuiz = quiz.items.map(item => `${item.answer}\t${item.question}`).join('\n')
+  }
+
+  moveQuiz(quiz: Quiz): void {
+    quiz.active = !quiz.active
+    this.api.editQuiz(quiz)
   }
 
   cancelEditQuiz() {
@@ -82,7 +101,8 @@ export class MainComponent implements OnInit {
     } else {
       this.api.saveQuiz({
         items,
-        name
+        name,
+        active: true
       } as Quiz)
     }
   }
