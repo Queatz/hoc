@@ -1,11 +1,12 @@
 <div class="container">
   <div class="word-list">
     <div *ngFor="let item of api.activeQuiz?.items">
-      {{ item.answer }}
+      {{ showAnswer ? item.answer : item.question }}
     </div>
   </div>
   <br />
   <div>
+    <button (click)="showAnswer = !showAnswer">Show {{ showAnswer ? 'Questions' : 'Answers'}}</button>
     <button (click)="leave()">Leave</button>
   </div>
 </div>

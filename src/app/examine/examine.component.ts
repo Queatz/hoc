@@ -8,6 +8,8 @@ import { ApiService } from '../api.service'
   styleUrls: ['./examine.component.scss']
 })
 export class ExamineComponent implements OnInit {
+  
+  showAnswer = false
 
   constructor(public api: ApiService, private router: Router) { }
 
