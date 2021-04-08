@@ -1,7 +1,7 @@
 <div class="container">
-  <h1>{{ item.answer }}</h1>
+  <h1 [ngClass]="{ 'hide': hide }">{{ item.answer }}</h1>
   <div class="question">{{ item.question }}</div>
-  <input #answerInput [(ngModel)]="answer" (keypress)="nextQuestionPlz($event)" />
+  <input #answerInput [(ngModel)]="answer" (keydown)="hideAnswer()" (keypress)="nextQuestionPlz($event)" />
   <button class="cta" (click)="advance()">Skip</button>
   <button class="cta" (click)="nextQuestionPlz()">Continue</button>
   <br />

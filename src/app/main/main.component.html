@@ -1,7 +1,8 @@
 <div>
   <h2>Học</h2>
   <section class="new-quiz">
-    <textarea [(ngModel)]="newQuiz" (keydown)="onTab(textarea, $event)" #textarea placeholder="Paste CSV here"></textarea>
+    <textarea [(ngModel)]="newQuiz" (keydown)="onTab(textarea, $event)" #textarea placeholder="Paste CSV here
+Answer | Question"></textarea>
     <br />
     <button *ngIf="editing" (click)="cancelEditQuiz()">Cancel</button>
     <button (click)="createQuiz(newQuiz)">{{ editing ? 'Save' : 'Create'}} Quiz</button>
@@ -14,21 +15,21 @@
       </div>
       <div class="quiz-actions">
         <button (click)="startQuiz(quiz)">
-          Start Quiz
+          {{ quiz.active ? 'Start Quiz' : 'Review' }}
         </button>
-        <button (click)="practiceQuiz(quiz)">
+        <button [ngClass]="{ 'only-on-hover': !quiz.active }" (click)="practiceQuiz(quiz)">
           Practice
         </button>
-        <button class="only-on-hover" (click)="examineQuiz(quiz)">
-          🔍
-        </button>
-        <button class="only-on-hover" (click)="moveQuiz(quiz)">
+        <button class="only-on-hover" [title]="quiz.active ? 'Mark as learned' : 'Mark as unlearned'" (click)="moveQuiz(quiz)">
           ✔
         </button>
-        <button class="only-on-hover" (click)="editQuiz(quiz)">
+        <button class="only-on-hover" title="View" (click)="examineQuiz(quiz)">
+          🔍
+        </button>
+        <button class="only-on-hover" title="Edit" (click)="editQuiz(quiz)">
           ✎
         </button>
-        <button class="only-on-hover" (click)="deleteQuiz(quiz)">
+        <button class="only-on-hover" title="Delete" (click)="deleteQuiz(quiz)">
           ❌
         </button>
       </div>

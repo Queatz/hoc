@@ -12,6 +12,7 @@ export class PracticeComponent implements OnInit, AfterViewInit {
   item!: QuizItem
   index = 0
   answer = ''
+  hide = false
 
   @ViewChild('answerInput', { static: true, read: ViewContainerRef })
   answerInput!: ViewContainerRef
@@ -44,11 +45,16 @@ export class PracticeComponent implements OnInit, AfterViewInit {
     this.advance()
   }
 
+  hideAnswer(): void {
+    this.hide = true
+  }
+
   advance(): void {
     if (this.index < this.api.activeQuiz!.items.length - 1) {
       this.item = this.api.activeQuiz!.items[++this.index]
       this.answer = ''
       this.answerInput.element.nativeElement.focus()
+      this.hide = false
     } else {
       alert('You are done!')
       this.router.navigate([ '/' ])

@@ -10,6 +10,12 @@
 h1 {
   font-size: 96px;
   margin-bottom: 0;
+  opacity: 1;
+
+  &.hide {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
 }
 
 .question {
