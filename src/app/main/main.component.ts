@@ -36,7 +36,7 @@ export class MainComponent implements OnInit {
 
   startExam(section: { name: string, quizzes: Array<Quiz> }, numberOfItems = 0): void {
     const quiz = new Quiz()
-    quiz.items = section.quizzes.map(x => x.items).flat().sort((a, b) => 0.5 - Math.random())
+    quiz.items = this.shuffle(section.quizzes.map(x => x.items).flat())
     
     if (numberOfItems) {
       quiz.items = quiz.items.slice(0, numberOfItems)
@@ -125,5 +125,14 @@ export class MainComponent implements OnInit {
       textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionEnd)
       textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart + 1
     }
+  }
+
+  private shuffle(array: Array<QuizItem>): Array<QuizItem> {
+      for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]]
+      }
+
+      return array
   }
 }
