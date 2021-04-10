@@ -1,3 +1,4 @@
+import { PercentPipe } from '@angular/common'
 import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core'
 import { Router } from '@angular/router'
 import { ApiService, Quiz, QuizItem } from '../api.service'
@@ -66,7 +67,9 @@ export class QuizComponent implements OnInit, AfterViewInit {
     } else {
       if (this.api.activeOptions?.exam) {
         if (this.api.failedItems.length > 0) {
-          alert(`You scored ${this.api.activeQuiz!.items.length - this.api.failedItems.length} out of ${this.api.activeQuiz!.items.length}!`)
+          const total = this.api.activeQuiz!.items.length
+          const correct = total - this.api.failedItems.length
+          alert(`You scored ${correct} out of ${total}${total > 10 ? ` (${new PercentPipe('en-US').transform(correct / total, '1.0')})` : ''}!`)
           const quiz = new Quiz()
           quiz.items = this.api.failedItems
           this.api.setQuiz(quiz)
