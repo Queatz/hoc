@@ -9,6 +9,9 @@ Answer | Question"></textarea>
   </section>
   <section *ngFor="let section of sections">
     <h3>{{ section.name }}</h3>
+    <button (click)="startExam(section)">Full Exam</button>
+    <button (click)="startExam(section, 10)">Short Exam</button>
+    <br /><br />
     <div class="quiz" *ngFor="let quiz of section.quizzes">
       <div class="quiz-name">
         {{ quiz.name }}

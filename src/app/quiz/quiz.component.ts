@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core'
 import { Router } from '@angular/router'
-import { ApiService, QuizItem } from '../api.service'
+import { ApiService, Quiz, QuizItem } from '../api.service'
 
 @Component({
   selector: 'app-quiz',
@@ -39,8 +39,14 @@ export class QuizComponent implements OnInit, AfterViewInit {
 
     if (this.item.answer !== this.answer) {
       if (this.tries > 1) {
-        alert('You have failed! Try again!')
-        this.leave()
+        if (this.api.activeOptions?.exam) {
+          this.api.markFailed(this.item)
+          alert('You have failed! Let\'s continue!')
+          this.nextItem()
+        } else {
+          alert('You have failed! Try again!')
+          this.leave()
+        }
       } else {
         this.tries++
         alert(this.tries === 2 ? 'No!' : 'Not quite!')
@@ -49,13 +55,30 @@ export class QuizComponent implements OnInit, AfterViewInit {
       return
     }
 
+    this.nextItem()
+  }
+
+  nextItem(): void {
     if (this.index < this.api.activeQuiz!.items.length - 1) {
       this.item = this.api.activeQuiz!.items[++this.index]
       this.answer = ''
       this.tries = 0
     } else {
-      alert('You are done!')
-      this.router.navigate([ '/' ])
+      if (this.api.activeOptions?.exam) {
+        if (this.api.failedItems.length > 0) {
+          alert(`You scored ${this.api.activeQuiz!.items.length - this.api.failedItems.length} out of ${this.api.activeQuiz!.items.length}!`)
+          const quiz = new Quiz()
+          quiz.items = this.api.failedItems
+          this.api.setQuiz(quiz)
+          this.router.navigate([ '/examine' ])
+        } else {
+          alert('You win!')
+          this.router.navigate([ '/' ])
+        }
+      } else {
+        alert('You are done!')
+        this.router.navigate([ '/' ])
+      }
     }
   }
 

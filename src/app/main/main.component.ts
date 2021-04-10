@@ -34,8 +34,20 @@ export class MainComponent implements OnInit {
     })
   }
 
+  startExam(section: { name: string, quizzes: Array<Quiz> }, numberOfItems = 0): void {
+    const quiz = new Quiz()
+    quiz.items = section.quizzes.map(x => x.items).flat().sort((a, b) => 0.5 - Math.random())
+    
+    if (numberOfItems) {
+      quiz.items = quiz.items.slice(0, numberOfItems)
+    }
+    
+    this.api.setQuiz(quiz, { exam: true })
+    this.router.navigate([ '/quiz' ])
+  }
+
   startQuiz(quiz: Quiz): void {
-    this.api.activeQuiz = quiz
+    this.api.setQuiz(quiz)
     this.router.navigate([ '/quiz' ])
   }
 
@@ -55,12 +67,12 @@ export class MainComponent implements OnInit {
   }
 
   practiceQuiz(quiz: Quiz): void {
-    this.api.activeQuiz = quiz
+    this.api.setQuiz(quiz)
     this.router.navigate([ '/practice' ])
   }
 
   examineQuiz(quiz: Quiz): void {
-    this.api.activeQuiz = quiz
+    this.api.setQuiz(quiz)
     this.router.navigate([ '/examine' ])
   }
 

@@ -5,14 +5,27 @@ import { BehaviorSubject } from 'rxjs'
   providedIn: 'root'
 })
 export class ApiService {
-
   quizzesObservable = new BehaviorSubject<Array<Quiz>>([])
   quizzes: Array<Quiz> = []
   activeQuiz?: Quiz
+  activeOptions?: { exam: boolean }
+  failedItems: Array<QuizItem> = []
 
   constructor() {
     this.load()
   }
+
+  setQuiz(quiz: Quiz, options?: { exam: boolean }): void {
+    this.activeQuiz = quiz
+    this.activeOptions = options
+    this.failedItems = []
+  }
+
+
+  markFailed(item: QuizItem): void {
+    this.failedItems.push(item)
+  }
+
 
   saveQuiz(quiz: Quiz) {
     this.quizzes.unshift(quiz)
