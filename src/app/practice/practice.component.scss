@@ -12,6 +12,15 @@ h1 {
   margin-bottom: 0;
   opacity: 1;
 
+  &.start-hidden {
+    opacity: 0;
+
+    &.reveal {
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
   &.hide {
     opacity: 0;
     transition: opacity 1s ease-out;

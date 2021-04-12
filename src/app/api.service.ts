@@ -8,14 +8,14 @@ export class ApiService {
   quizzesObservable = new BehaviorSubject<Array<Quiz>>([])
   quizzes: Array<Quiz> = []
   activeQuiz?: Quiz
-  activeOptions?: { exam: boolean }
+  activeOptions?: { exam?: boolean, endless?: boolean }
   failedItems: Array<QuizItem> = []
 
   constructor() {
     this.load()
   }
 
-  setQuiz(quiz: Quiz, options?: { exam: boolean }): void {
+  setQuiz(quiz: Quiz, options?: { exam?: boolean, endless?: boolean }): void {
     this.activeQuiz = quiz
     this.activeOptions = options
     this.failedItems = []

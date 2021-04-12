@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { ApiService, Quiz, QuizItem } from '../api.service'
+import { shuffle } from '../utils'
 
 @Component({
   selector: 'app-main',
@@ -36,7 +37,7 @@ export class MainComponent implements OnInit {
 
   startExam(section: { name: string, quizzes: Array<Quiz> }, numberOfItems = 0): void {
     const quiz = new Quiz()
-    quiz.items = this.shuffle(section.quizzes.map(x => x.items).flat())
+    quiz.items = shuffle(section.quizzes.map(x => x.items).flat())
     
     if (numberOfItems) {
       quiz.items = quiz.items.slice(0, numberOfItems)
@@ -47,6 +48,8 @@ export class MainComponent implements OnInit {
   }
 
   startQuiz(quiz: Quiz): void {
+    // const randomQuiz = new Quiz()
+    // randomQuiz.items = this.shuffle([ ...quiz.items ])
     this.api.setQuiz(quiz)
     this.router.navigate([ '/quiz' ])
   }
@@ -66,7 +69,16 @@ export class MainComponent implements OnInit {
     this.newQuiz = ''
   }
 
+  endlessQuiz(quiz: Quiz): void {
+    const randomQuiz = new Quiz()
+    randomQuiz.items = shuffle([ ...quiz.items ])
+    this.api.setQuiz(quiz, { endless: true })
+    this.router.navigate([ '/practice' ])
+  }
+
   practiceQuiz(quiz: Quiz): void {
+    // const randomQuiz = new Quiz()
+    // randomQuiz.items = shuffle([ ...quiz.items ])
     this.api.setQuiz(quiz)
     this.router.navigate([ '/practice' ])
   }
@@ -120,19 +132,10 @@ export class MainComponent implements OnInit {
   }
 
   onTab(textarea: HTMLTextAreaElement, e: KeyboardEvent): void {
-    if (e.key == 'Tab') {
+    if (e.key === 'Tab') {
       e.preventDefault()
       textarea.setRangeText('\t', textarea.selectionStart, textarea.selectionEnd)
       textarea.selectionStart = textarea.selectionEnd = textarea.selectionStart + 1
     }
-  }
-
-  private shuffle(array: Array<QuizItem>): Array<QuizItem> {
-      for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]]
-      }
-
-      return array
   }
 }

@@ -1,13 +1,14 @@
 <div class="container">
-  <h1 [ngClass]="{ 'hide': hide }">{{ item.answer }}</h1>
+  <h1 [ngClass]="{ 'hide': !api.activeOptions?.endless && hide, 'start-hidden': api.activeOptions?.endless, 'reveal': reveal }">{{ item.answer }}</h1>
   <div class="question">{{ item.question }}</div>
   <input #answerInput [(ngModel)]="answer" (keydown)="hideAnswer()" (keypress)="nextQuestionPlz($event)" />
-  <button class="cta" (click)="advance()">Skip</button>
+  <button class="cta" *ngIf="!api.activeOptions?.endless" (click)="advance()">Skip</button>
   <button class="cta" (click)="nextQuestionPlz()">Continue</button>
   <br />
   <br />
   <div>
-    <span>{{ index + 1 }} of {{ api.activeQuiz?.items?.length }}</span>
+    <span *ngIf="!api.activeOptions?.endless">{{ index + 1 }} of {{ api.activeQuiz?.items?.length }}</span>
+    <span *ngIf="api.activeOptions?.endless">{{ total + 1 }} of {{ api.activeQuiz?.items?.length }}</span>
     <br />
     <button (click)="leave()">Leave</button>
   </div>

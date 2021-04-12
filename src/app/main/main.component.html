@@ -20,6 +20,9 @@ Answer | Question"></textarea>
         <button (click)="startQuiz(quiz)">
           {{ quiz.active ? 'Start Quiz' : 'Review' }}
         </button>
+        <button [ngClass]="{ 'only-on-hover': !quiz.active }" (click)="endlessQuiz(quiz)">
+          Endless
+        </button>
         <button [ngClass]="{ 'only-on-hover': !quiz.active }" (click)="practiceQuiz(quiz)">
           Practice
         </button>

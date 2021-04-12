@@ -11,8 +11,10 @@ export class PracticeComponent implements OnInit, AfterViewInit {
 
   item!: QuizItem
   index = 0
+  total = 0
   answer = ''
   hide = false
+  reveal = false
 
   @ViewChild('answerInput', { static: true, read: ViewContainerRef })
   answerInput!: ViewContainerRef
@@ -38,11 +40,26 @@ export class PracticeComponent implements OnInit, AfterViewInit {
     }
 
     if (this.item.answer !== this.answer) {
-      alert('Not quite right...')
+      if (this.api.activeOptions?.endless) {
+        this.reveal = true
+        this.reinsertCurrent()
+      } else {
+        alert('Not quite right...')
+      }
       return
     }
 
     this.advance()
+  }
+
+  reinsertCurrent(): void {
+    let i = (this.index + Math.floor(2 + Math.random() * 2)) % this.api.activeQuiz!.items.length
+
+    this.api.activeQuiz!.items.splice(i, 0, this.api.activeQuiz!.items[this.index])
+
+    if (this.index > i) {
+      this.index++
+    }
   }
 
   hideAnswer(): void {
@@ -50,11 +67,17 @@ export class PracticeComponent implements OnInit, AfterViewInit {
   }
 
   advance(): void {
+    if (this.api.activeOptions?.endless && this.index >= this.api.activeQuiz!.items.length - 1) {
+      this.index = -1
+    }
+
     if (this.index < this.api.activeQuiz!.items.length - 1) {
       this.item = this.api.activeQuiz!.items[++this.index]
       this.answer = ''
       this.answerInput.element.nativeElement.focus()
       this.hide = false
+      this.reveal = false
+      this.total++
     } else {
       alert('You are done!')
       this.router.navigate([ '/' ])
