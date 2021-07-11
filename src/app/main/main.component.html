@@ -1,7 +1,7 @@
 <div>
   <h2>Học</h2>
   <section class="new-quiz">
-    <textarea [(ngModel)]="newQuiz" (keydown)="onTab(textarea, $event)" #textarea placeholder="Paste CSV here
+    <textarea [(ngModel)]="newQuiz" (keydown)="onTab(textarea, $event)" #textarea placeholder="Paste TSV here
 Answer | Question"></textarea>
     <br />
     <button *ngIf="editing" (click)="cancelEditQuiz()">Cancel</button>

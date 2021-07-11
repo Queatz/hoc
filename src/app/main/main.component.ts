@@ -18,7 +18,7 @@ export class MainComponent implements OnInit {
     public api: ApiService,
     private router: Router,
     private cr: ChangeDetectorRef
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.api.quizzesObservable.subscribe((quizzes: Array<Quiz>) => {
@@ -72,7 +72,7 @@ export class MainComponent implements OnInit {
   endlessQuiz(quiz: Quiz): void {
     const randomQuiz = new Quiz()
     randomQuiz.items = shuffle([ ...quiz.items ])
-    this.api.setQuiz(quiz, { endless: true })
+    this.api.setQuiz(randomQuiz, { endless: true })
     this.router.navigate([ '/practice' ])
   }
 
@@ -94,8 +94,8 @@ export class MainComponent implements OnInit {
     }
   }
 
-  createQuiz(csv: string): void {
-    const items = csv.split('\n').filter(x => !!x).map(line => {
+  createQuiz(tsv: string): void {
+    const items = tsv.split('\n').filter(x => !!x).map(line => {
       const [ answer, question ] = line.split('\t').map(x => x.trim().replace(/\s+/g, ' '))
       
       if (!answer || !question) {
